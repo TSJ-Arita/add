@@ -7,9 +7,11 @@ input.onButtonPressed(Button.B, function () {
     basic.showString("L")
 })
 let Start = 0
-let 方向 = 0
 Start = 0
+let strip = neopixel.create(DigitalPin.P15, 4, NeoPixelMode.RGB)
+strip.showColor(neopixel.colors(NeoPixelColors.White))
 basic.forever(function () {
+    maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 255)
     basic.showString("" + (Start))
     if (Start == 1) {
     	

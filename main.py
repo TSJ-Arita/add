@@ -13,13 +13,16 @@ input.on_button_pressed(Button.B, on_button_pressed_b)
 Start = 0
 方向 = 0
 Start = 0
+strip = neopixel.create(DigitalPin.P15, 4, NeoPixelMode.RGB)
+strip.show_color(neopixel.colors(NeoPixelColors.WHITE))
 
 def on_forever():
+    maqueen.motor_run(maqueen.Motors.ALL, maqueen.Dir.CW, 255)
+    basic.show_string("" + str((Start)))
     if Start == 1:
         pass
     else:
         pass
-    basic.show_string("" + str((Start)))
 basic.forever(on_forever)
 
 def on_in_background():
