@@ -6,10 +6,53 @@ input.onButtonPressed(Button.B, function () {
     Start = 2
     basic.showString("L")
 })
+function chokobo () {
+    music.setTempo(150)
+    music.playTone(587, music.beat(BeatFraction.Eighth))
+    music.rest(music.beat(BeatFraction.Eighth))
+    music.playTone(494, music.beat(BeatFraction.Eighth))
+    music.playTone(392, music.beat(BeatFraction.Eighth))
+    music.playTone(330, music.beat(BeatFraction.Eighth))
+    music.playTone(587, music.beat(BeatFraction.Eighth))
+    music.playTone(494, music.beat(BeatFraction.Eighth))
+    music.playTone(392, music.beat(BeatFraction.Eighth))
+    music.playTone(494, music.beat(BeatFraction.Eighth))
+    music.rest(music.beat(BeatFraction.Eighth))
+    music.playTone(392, music.beat(BeatFraction.Eighth))
+    music.rest(music.beat(BeatFraction.Eighth))
+    music.playTone(494, music.beat(BeatFraction.Quarter))
+    music.rest(music.beat(BeatFraction.Eighth))
+    music.playTone(440, music.beat(BeatFraction.Eighth))
+    music.playTone(392, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+    music.playTone(392, music.beat(BeatFraction.Sixteenth))
+    music.playTone(440, music.beat(BeatFraction.Sixteenth))
+    music.playTone(392, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+    music.playTone(349, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+    music.playTone(392, music.beat(BeatFraction.Quarter))
+    music.rest(music.beat(BeatFraction.Eighth))
+    music.playTone(349, music.beat(BeatFraction.Eighth))
+    music.playTone(392, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+    music.playTone(392, music.beat(BeatFraction.Sixteenth))
+    music.playTone(330, music.beat(BeatFraction.Sixteenth))
+    music.playTone(587, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+}
+let _L_SPD = 0
+let _R_SPD = 0
 let Start = 0
 Start = 1
-let _R_SPD = 51
-let _L_SPD = 34
+let debug = 1
+if (debug) {
+    _R_SPD = 51
+    _L_SPD = 34
+} else {
+    _R_SPD = 255
+    _L_SPD = 170
+}
 let strip = neopixel.create(DigitalPin.P15, 4, NeoPixelMode.RGB)
 basic.showString("" + Start)
 basic.pause(2000)
