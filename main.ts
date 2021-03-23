@@ -83,30 +83,39 @@ Start = 0
 let debug = 1
 if (debug) {
     _R_SPD = 51
-    _L_SPD = 34
+    _L_SPD = 38
 } else {
     _R_SPD = 255
-    _L_SPD = 170
+    _L_SPD = 190
 }
 let strip = neopixel.create(DigitalPin.P15, 4, NeoPixelMode.RGB)
+basic.showString("" + Start)
+while (Start == 0) {
+    basic.pause(1000)
+}
 basic.showString("" + Start)
 basic.pause(2000)
 basic.forever(function () {
     maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, _L_SPD)
     maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, _R_SPD)
     if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
-        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, _L_SPD)
-        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, _R_SPD)
-        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, _L_SPD)
-        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, _R_SPD)
+        if (Start == 2) {
+            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
+            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
+        } else {
+            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
+            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
+        }
     }
     if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
         _L_SPD = 11
+        Start = 2
     } else {
-        _L_SPD = 34
+        _L_SPD = 38
     }
     if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
         _R_SPD = 17
+        Start = 1
     } else {
         _R_SPD = 51
     }
