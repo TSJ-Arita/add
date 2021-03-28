@@ -1,3 +1,14 @@
+function R_turn () {
+    if (Turn == 0) {
+        Turn = 1
+    } else {
+        if (Turn < 8) {
+            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, _L_SPD)
+        }
+        Turn = Turn + 1
+    }
+    _R_SPD = Turn
+}
 function chokobo1 () {
     music.setTempo(39)
     music.playTone(587, music.beat(BeatFraction.Eighth))
@@ -76,11 +87,12 @@ input.onButtonPressed(Button.B, function () {
     Start = 2
     basic.showString("L")
 })
+let Turn = 0
 let _L_SPD = 0
 let _R_SPD = 0
 let Start = 0
 Start = 0
-let debug = 1
+let debug = 0
 if (debug) {
     _R_SPD = 51
     _L_SPD = 38
@@ -88,6 +100,8 @@ if (debug) {
     _R_SPD = 255
     _L_SPD = 190
 }
+Turn = 0
+let trace = 0
 let strip = neopixel.create(DigitalPin.P15, 4, NeoPixelMode.RGB)
 basic.showString("" + Start)
 while (Start == 0) {
@@ -96,28 +110,31 @@ while (Start == 0) {
 basic.showString("" + Start)
 basic.pause(2000)
 basic.forever(function () {
-    maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, _L_SPD)
-    maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, _R_SPD)
-    if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
-        if (Start == 2) {
-            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
-            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
+    trace = trace + 1
+    if (Start == 1) {
+        if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
+            if (trace > 30) {
+                R_turn()
+            } else {
+                _L_SPD = 30
+            }
+        } else if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
+            if (trace > 100) {
+                trace = 0
+            }
+            _L_SPD = 130
         } else {
-            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
-            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
+            Turn = 0
+            _R_SPD = 255
         }
-    }
-    if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
-        _L_SPD = 11
-        Start = 2
+        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, _L_SPD)
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, _R_SPD)
+        _L_SPD = 190
     } else {
-        _L_SPD = 38
+        maqueen.motorStop(maqueen.Motors.All)
     }
-    if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
-        _R_SPD = 17
-        Start = 1
-    } else {
-        _R_SPD = 51
+    if (trace == 50) {
+        music.playTone(392, music.beat(BeatFraction.Sixteenth))
     }
 })
 control.inBackground(function () {
