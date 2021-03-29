@@ -87,12 +87,13 @@ input.onButtonPressed(Button.B, function () {
     Start = 2
     basic.showString("L")
 })
+let trace = 0
 let Turn = 0
 let _L_SPD = 0
 let _R_SPD = 0
+let debug = 0
 let Start = 0
 Start = 0
-let debug = 0
 if (debug) {
     _R_SPD = 51
     _L_SPD = 38
@@ -101,25 +102,25 @@ if (debug) {
     _L_SPD = 190
 }
 Turn = 0
-let trace = 0
 let strip = neopixel.create(DigitalPin.P15, 4, NeoPixelMode.RGB)
-basic.showString("" + Start)
+basic.showString("" + (Start))
 while (Start == 0) {
     basic.pause(1000)
 }
-basic.showString("" + Start)
+basic.showString("" + (Start))
+strip.showColor(neopixel.colors(NeoPixelColors.Blue))
 basic.pause(2000)
 basic.forever(function () {
     trace = trace + 1
     if (Start == 1) {
         if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
-            if (trace > 30) {
+            if (trace > 50) {
                 R_turn()
             } else {
                 _L_SPD = 30
             }
         } else if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
-            if (trace > 100) {
+            if (trace > 50) {
                 trace = 0
             }
             _L_SPD = 130
@@ -133,10 +134,10 @@ basic.forever(function () {
     } else {
         maqueen.motorStop(maqueen.Motors.All)
     }
-    if (trace == 50) {
-        music.playTone(392, music.beat(BeatFraction.Sixteenth))
-    }
 })
 control.inBackground(function () {
-	
+    for (let index = 0; index < 2; index++) {
+        chokobo1()
+    }
+    chokobo2()
 })
