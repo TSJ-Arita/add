@@ -186,7 +186,7 @@ control.inBackground(function () {
         }
         chokobo2()
         chokobo3()
-        tempo = tempo + 1
+        tempo = tempo + 2
         music.setTempo(tempo)
     }
 })
