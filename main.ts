@@ -10,7 +10,7 @@ function R_turn () {
     _R_SPD = Turn
 }
 function chokobo1 () {
-    music.setTempo(39)
+    music.setTempo(tempo)
     music.playTone(587, music.beat(BeatFraction.Eighth))
     music.rest(music.beat(BeatFraction.Eighth))
     music.playTone(494, music.beat(BeatFraction.Eighth))
@@ -64,12 +64,13 @@ function chokobo2 () {
     music.rest(music.beat(BeatFraction.Eighth))
     music.playTone(784, music.beat(BeatFraction.Eighth))
     music.rest(music.beat(BeatFraction.Eighth))
-    music.playTone(587, music.beat(BeatFraction.Half))
-    music.playTone(494, music.beat(BeatFraction.Eighth))
+    music.playTone(587, music.beat(BeatFraction.Quarter))
     music.rest(music.beat(BeatFraction.Eighth))
-    music.playTone(523, music.beat(BeatFraction.Eighth))
+    music.playTone(494, music.beat(BeatFraction.Eighth))
+    music.playTone(523, music.beat(BeatFraction.Quarter))
     music.playTone(440, music.beat(BeatFraction.Eighth))
     music.playTone(349, music.beat(BeatFraction.Eighth))
+    music.playTone(294, music.beat(BeatFraction.Eighth))
     music.playTone(349, music.beat(BeatFraction.Eighth))
     music.playTone(440, music.beat(BeatFraction.Eighth))
     music.playTone(523, music.beat(BeatFraction.Eighth))
@@ -83,11 +84,52 @@ function chokobo2 () {
     music.rest(music.beat(BeatFraction.Sixteenth))
     music.playTone(494, music.beat(BeatFraction.Half))
 }
+function chokobo3 () {
+    music.playTone(659, music.beat(BeatFraction.Eighth))
+    music.rest(music.beat(BeatFraction.Eighth))
+    music.playTone(523, music.beat(BeatFraction.Eighth))
+    music.playTone(440, music.beat(BeatFraction.Eighth))
+    music.playTone(349, music.beat(BeatFraction.Eighth))
+    music.playTone(440, music.beat(BeatFraction.Eighth))
+    music.playTone(523, music.beat(BeatFraction.Eighth))
+    music.playTone(659, music.beat(BeatFraction.Eighth))
+    music.playTone(587, music.beat(BeatFraction.Eighth))
+    music.rest(music.beat(BeatFraction.Eighth))
+    music.playTone(784, music.beat(BeatFraction.Eighth))
+    music.rest(music.beat(BeatFraction.Eighth))
+    music.playTone(587, music.beat(BeatFraction.Quarter))
+    music.rest(music.beat(BeatFraction.Eighth))
+    music.playTone(494, music.beat(BeatFraction.Eighth))
+    music.playTone(440, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+    music.playTone(440, music.beat(BeatFraction.Sixteenth))
+    music.playTone(392, music.beat(BeatFraction.Sixteenth))
+    music.playTone(440, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+    music.playTone(392, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+    music.playTone(440, music.beat(BeatFraction.Quarter))
+    music.rest(music.beat(BeatFraction.Eighth))
+    music.playTone(392, music.beat(BeatFraction.Eighth))
+    music.playTone(440, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+    music.playTone(440, music.beat(BeatFraction.Sixteenth))
+    music.playTone(494, music.beat(BeatFraction.Sixteenth))
+    music.playTone(523, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+    music.playTone(587, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+    music.playTone(659, music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Sixteenth))
+    music.rest(music.beat(BeatFraction.Eighth))
+    music.playTone(740, music.beat(BeatFraction.Quarter))
+}
 input.onButtonPressed(Button.B, function () {
     Start = 2
     basic.showString("L")
 })
 let trace = 0
+let tempo = 0
 let Turn = 0
 let _L_SPD = 0
 let _R_SPD = 0
@@ -109,6 +151,8 @@ while (Start == 0) {
 }
 basic.showString("" + (Start))
 strip.showColor(neopixel.colors(NeoPixelColors.Blue))
+tempo = 39
+music.setTempo(tempo)
 basic.pause(2000)
 basic.forever(function () {
     trace = trace + 1
@@ -136,8 +180,13 @@ basic.forever(function () {
     }
 })
 control.inBackground(function () {
-    for (let index = 0; index < 2; index++) {
-        chokobo1()
+    while (tempo != 0) {
+        for (let index = 0; index < 2; index++) {
+            chokobo1()
+        }
+        chokobo2()
+        chokobo3()
+        tempo = tempo + 1
+        music.setTempo(tempo)
     }
-    chokobo2()
 })
