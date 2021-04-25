@@ -47,8 +47,13 @@ function chokobo1 () {
     music.rest(music.beat(BeatFraction.Sixteenth))
     music.playTone(698, music.beat(BeatFraction.Half))
 }
+function SpeedUp () {
+    music.playTone(392 + trace, music.beat(BeatFraction.Eighth))
+}
 input.onButtonPressed(Button.A, function () {
     Start = 1
+    debug = 0
+    tempo = 40
     basic.showString("R")
 })
 function chokobo2 () {
@@ -84,6 +89,9 @@ function chokobo2 () {
     music.rest(music.beat(BeatFraction.Sixteenth))
     music.playTone(494, music.beat(BeatFraction.Half))
 }
+function SpeedDown () {
+    music.playTone(392 - trace, music.beat(BeatFraction.Eighth))
+}
 function chokobo3 () {
     music.playTone(659, music.beat(BeatFraction.Eighth))
     music.rest(music.beat(BeatFraction.Eighth))
@@ -103,7 +111,7 @@ function chokobo3 () {
     music.playTone(440, music.beat(BeatFraction.Sixteenth))
     music.rest(music.beat(BeatFraction.Sixteenth))
     music.playTone(440, music.beat(BeatFraction.Sixteenth))
-    music.playTone(392, music.beat(BeatFraction.Sixteenth))
+    music.playTone(494, music.beat(BeatFraction.Sixteenth))
     music.playTone(440, music.beat(BeatFraction.Sixteenth))
     music.rest(music.beat(BeatFraction.Sixteenth))
     music.playTone(392, music.beat(BeatFraction.Sixteenth))
@@ -126,6 +134,7 @@ function chokobo3 () {
 }
 input.onButtonPressed(Button.B, function () {
     Start = 2
+    debug = 0
     basic.showString("L")
 })
 let trace = 0
@@ -136,6 +145,7 @@ let _R_SPD = 0
 let debug = 0
 let Start = 0
 Start = 0
+debug = 1
 if (debug) {
     _R_SPD = 51
     _L_SPD = 38
@@ -146,15 +156,12 @@ if (debug) {
 Turn = 0
 let strip = neopixel.create(DigitalPin.P15, 4, NeoPixelMode.RGB)
 basic.showString("" + (Start))
-while (Start == 0) {
-    basic.pause(1000)
-}
-basic.showString("" + (Start))
 strip.showColor(neopixel.colors(NeoPixelColors.Blue))
-tempo = 39
+tempo = 52
 music.setTempo(tempo)
 basic.pause(2000)
 basic.forever(function () {
+    basic.showString("" + (Start))
     trace = trace + 1
     if (Start == 1) {
         if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
@@ -175,18 +182,30 @@ basic.forever(function () {
         maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, _L_SPD)
         maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, _R_SPD)
         _L_SPD = 190
-    } else {
+    } else if (Start == 2) {
         maqueen.motorStop(maqueen.Motors.All)
+    } else {
+        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, _L_SPD)
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, _R_SPD)
     }
 })
 control.inBackground(function () {
-    while (tempo != 0) {
-        for (let index = 0; index < 2; index++) {
-            chokobo1()
+    while (true) {
+        if (Start != 0) {
+            while (tempo != 0) {
+                for (let index = 0; index < 2; index++) {
+                    chokobo1()
+                }
+                chokobo2()
+                chokobo3()
+                tempo = tempo + 2
+                music.setTempo(tempo)
+            }
+        } else {
+            for (let index = 0; index < 1; index++) {
+                music.playTone(494, music.beat(BeatFraction.Half))
+                music.rest(music.beat(BeatFraction.Half))
+            }
         }
-        chokobo2()
-        chokobo3()
-        tempo = tempo + 2
-        music.setTempo(tempo)
     }
 })
