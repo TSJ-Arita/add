@@ -54,8 +54,31 @@ input.onButtonPressed(Button.A, function () {
     Start = 1
     debug = 0
     tempo = 40
-    basic.showString("R")
+    basic.showArrow(ArrowNames.West)
 })
+function L_TRN () {
+    _R_SPD = 127
+    for (let index = 0; index < 1000; index++) {
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, _R_SPD)
+    }
+    basic.pause(2000)
+    if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
+        for (let index = 0; index < 1000; index++) {
+            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, _R_SPD)
+            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, _R_SPD)
+        }
+        Start = 2
+        basic.showArrow(ArrowNames.East)
+    } else {
+        Start = 1
+        basic.showArrow(ArrowNames.West)
+    }
+    tempo = 40
+    _R_SPD = 25
+    while (true) {
+        maqueen.motorStop(maqueen.Motors.All)
+    }
+}
 function chokobo2 () {
     music.playTone(659, music.beat(BeatFraction.Eighth))
     music.rest(music.beat(BeatFraction.Eighth))
@@ -135,7 +158,8 @@ function chokobo3 () {
 input.onButtonPressed(Button.B, function () {
     Start = 2
     debug = 0
-    basic.showString("L")
+    tempo = 40
+    basic.showArrow(ArrowNames.East)
 })
 let trace = 0
 let tempo = 0
@@ -155,13 +179,12 @@ if (debug) {
 }
 Turn = 0
 let strip = neopixel.create(DigitalPin.P15, 4, NeoPixelMode.RGB)
-basic.showString("" + (Start))
+basic.showString("R")
 strip.showColor(neopixel.colors(NeoPixelColors.Blue))
 tempo = 52
 music.setTempo(tempo)
 basic.pause(2000)
 basic.forever(function () {
-    basic.showString("" + (Start))
     trace = trace + 1
     if (Start == 1) {
         if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
@@ -185,27 +208,17 @@ basic.forever(function () {
     } else if (Start == 2) {
         maqueen.motorStop(maqueen.Motors.All)
     } else {
+        _L_SPD = 25
+        _R_SPD = 25
+        if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
+            maqueen.motorStop(maqueen.Motors.All)
+            basic.pause(500)
+            L_TRN()
+        }
         maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, _L_SPD)
         maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, _R_SPD)
     }
 })
 control.inBackground(function () {
-    while (true) {
-        if (Start != 0) {
-            while (tempo != 0) {
-                for (let index = 0; index < 2; index++) {
-                    chokobo1()
-                }
-                chokobo2()
-                chokobo3()
-                tempo = tempo + 2
-                music.setTempo(tempo)
-            }
-        } else {
-            for (let index = 0; index < 1; index++) {
-                music.playTone(494, music.beat(BeatFraction.Half))
-                music.rest(music.beat(BeatFraction.Half))
-            }
-        }
-    }
+	
 })
