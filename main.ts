@@ -57,17 +57,27 @@ input.onButtonPressed(Button.A, function () {
     basic.showArrow(ArrowNames.West)
 })
 function L_TRN () {
-    Start = 11
     _R_SPD = 127
-    for (let index = 0; index < 1100; index++) {
+    for (let index = 0; index < 1000; index++) {
         maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, _R_SPD)
     }
-    maqueen.motorStop(maqueen.Motors.All)
-    basic.pause(500)
-    _L_SPD = 85
-    trace = 0
+    basic.pause(2000)
+    if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
+        for (let index = 0; index < 1000; index++) {
+            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, _R_SPD)
+            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, _R_SPD)
+        }
+        Start = 2
+        basic.showArrow(ArrowNames.East)
+    } else {
+        Start = 1
+        basic.showArrow(ArrowNames.West)
+    }
     tempo = 40
-    music.setTempo(tempo)
+    _R_SPD = 25
+    while (true) {
+        maqueen.motorStop(maqueen.Motors.All)
+    }
 }
 function chokobo2 () {
     music.playTone(659, music.beat(BeatFraction.Eighth))
@@ -161,8 +171,8 @@ let Start = 0
 Start = 0
 debug = 1
 if (debug) {
-    _R_SPD = 25
-    _L_SPD = 25
+    _R_SPD = 51
+    _L_SPD = 38
 } else {
     _R_SPD = 255
     _L_SPD = 190
@@ -170,7 +180,7 @@ if (debug) {
 Turn = 0
 let strip = neopixel.create(DigitalPin.P15, 4, NeoPixelMode.RGB)
 basic.showString("R")
-strip.showColor(neopixel.colors(NeoPixelColors.White))
+strip.showColor(neopixel.colors(NeoPixelColors.Blue))
 tempo = 52
 music.setTempo(tempo)
 basic.pause(2000)
@@ -187,52 +197,26 @@ basic.forever(function () {
             if (trace > 50) {
                 trace = 0
             }
-            _L_SPD = 25
+            _L_SPD = 130
         } else {
             Turn = 0
-            _R_SPD = 51
+            _R_SPD = 255
         }
         maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, _L_SPD)
         maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, _R_SPD)
-        _L_SPD = 38
+        _L_SPD = 190
     } else if (Start == 2) {
-        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, _L_SPD)
-        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, _R_SPD)
-        basic.showIcon(IconNames.No)
-        while (true) {
-            maqueen.motorStop(maqueen.Motors.All)
-        }
+        maqueen.motorStop(maqueen.Motors.All)
     } else {
-        if (Start == 11) {
-            if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
-                for (let index = 0; index < 550; index++) {
-                    maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, _R_SPD)
-                    maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, _R_SPD)
-                }
-                maqueen.motorStop(maqueen.Motors.All)
-                basic.pause(500)
-                Start = 2
-                basic.showArrow(ArrowNames.East)
-                strip.showColor(neopixel.colors(NeoPixelColors.Red))
-            } else {
-                Start = 1
-                basic.showArrow(ArrowNames.West)
-                strip.showColor(neopixel.colors(NeoPixelColors.Blue))
-            }
-            tempo = 40
-        } else if (Start == 12) {
-            while (true) {
-                maqueen.motorStop(maqueen.Motors.All)
-            }
-        } else {
-            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, _L_SPD)
-            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, _R_SPD)
-            if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
-                maqueen.motorStop(maqueen.Motors.All)
-                basic.pause(500)
-                L_TRN()
-            }
+        _L_SPD = 25
+        _R_SPD = 25
+        if (maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1) {
+            maqueen.motorStop(maqueen.Motors.All)
+            basic.pause(500)
+            L_TRN()
         }
+        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, _L_SPD)
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, _R_SPD)
     }
 })
 control.inBackground(function () {
